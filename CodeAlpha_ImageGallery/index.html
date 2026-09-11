@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore a curated showcase of world photography. Modern, responsive image gallery with category filters, interactive lightbox modal, and smooth animations.">
+  <meta name="theme-color" content="#0b0f19">
+  <title>Lumina | Modern Responsive Image Gallery</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient-glow glow-1" aria-hidden="true"></div>
+  <div class="ambient-glow glow-2" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+        <span class="brand-name">Lumina<span class="accent-dot">.</span></span>
+      </div>
+      <div class="header-stats">
+        <span class="badge badge-pulse" id="total-photos-badge">24 Curated Photos</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      <section class="hero-section" aria-labelledby="hero-title">
+        <div class="hero-badge">
+          <span class="sparkle-icon" aria-hidden="true">✦</span> Visual Portfolio
+        </div>
+        <h1 id="hero-title" class="hero-title">Explore the Gallery</h1>
+        <p class="hero-subtitle">
+          Immerse yourself in breathtaking captures across nature, architecture, wildlife, travel, and culinary arts.
+        </p>
+
+        <div class="search-wrapper">
+          <div class="search-input-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input 
+              type="text" 
+              id="gallery-search" 
+              class="search-input" 
+              placeholder="Search captures by title, category, or keyword..." 
+              aria-label="Search gallery images"
+              autocomplete="off"
+            >
+            <button type="button" id="clear-search-btn" class="clear-search-btn hidden" aria-label="Clear search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <nav class="filter-navigation" aria-label="Image Category Filters">
+          <div class="filter-tabs" id="filter-container" role="tablist">
+          </div>
+        </nav>
+      </section>
+
+      <section class="gallery-toolbar">
+        <div class="results-info">
+          <span class="results-count" id="gallery-count-info">Showing all photos</span>
+        </div>
+        <div class="gallery-view-hint" aria-hidden="true">
+          <span>Click any image to view in full resolution</span>
+        </div>
+      </section>
+
+      <section class="gallery-wrapper" aria-label="Image Showcase">
+        <div class="gallery-grid" id="gallery-grid">
+        </div>
+
+        <div class="empty-state hidden" id="empty-state">
+          <div class="empty-state-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+          </div>
+          <h3 class="empty-state-title">No matching captures found</h3>
+          <p class="empty-state-desc">Try searching for a different keyword or selecting another category.</p>
+          <button type="button" class="btn btn-secondary" id="reset-filter-btn">Reset All Filters</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div 
+    id="lightbox-modal" 
+    class="lightbox" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-hidden="true" 
+    aria-label="Image Lightbox Preview"
+  >
+    <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
+
+    <div class="lightbox-dialog">
+      <div class="lightbox-header">
+        <div class="lightbox-meta">
+          <span class="lightbox-category-tag" id="lightbox-category">Category</span>
+          <span class="lightbox-counter" id="lightbox-counter">1 / 24</span>
+        </div>
+        
+        <div class="lightbox-top-actions">
+          <button type="button" class="lightbox-action-btn" id="lightbox-zoom-toggle" aria-label="Toggle zoom">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              <line x1="11" y1="8" x2="11" y2="14"></line>
+              <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+          </button>
+          <button type="button" class="lightbox-close-btn" id="lightbox-close-btn" aria-label="Close Lightbox (Esc)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span class="esc-hint">ESC</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="lightbox-stage">
+        <button 
+          type="button" 
+          class="lightbox-nav-btn nav-prev" 
+          id="lightbox-prev-btn" 
+          aria-label="Previous image (Left Arrow)"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <div class="lightbox-media-container" id="lightbox-media-container">
+          <div class="lightbox-spinner" id="lightbox-loader" aria-hidden="true"></div>
+          <img 
+            src="" 
+            alt="" 
+            id="lightbox-img" 
+            class="lightbox-image"
+          >
+        </div>
+
+        <button 
+          type="button" 
+          class="lightbox-nav-btn nav-next" 
+          id="lightbox-next-btn" 
+          aria-label="Next image (Right Arrow)"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="lightbox-footer">
+        <div class="lightbox-info">
+          <h2 class="lightbox-title" id="lightbox-title">Image Title</h2>
+          <p class="lightbox-desc" id="lightbox-desc">Detailed photo description or location info.</p>
+        </div>
+        <div class="lightbox-shortcuts-hint" aria-hidden="true">
+          <span><kbd>←</kbd> <kbd>→</kbd> Navigate</span>
+          <span><kbd>ESC</kbd> Close</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <span class="brand-name">Lumina Gallery</span>
+        <p class="footer-tagline">Designed with vanilla HTML5, CSS3, &amp; JavaScript for high-performance visual storytelling.</p>
+      </div>
+      <div class="footer-meta">
+        <span>© 2026 Lumina Gallery. Built for modern browsers.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
